@@ -30,7 +30,7 @@ window.CONTENT = {
      1-usul (tavsiya, xavfsiz): endpoint — worker.js ni joylagandan keyingi manzil.
      2-usul (tez, lekin xavfsiz emas): telegramToken + telegramChatId.            */
   form: {
-    endpoint:       ``,   // masalan: https://pentagon-form.SIZNING-NOM.workers.dev
+    endpoint:       `/api/telegram`,   // Vercel funksiyasi (api/telegram.js). Cloudflare ishlatsangiz: https://....workers.dev
     telegramToken:  ``,   // faqat 2-usulda
     telegramChatId: ``    // faqat 2-usulda
   },

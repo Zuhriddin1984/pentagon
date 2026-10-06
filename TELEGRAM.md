@@ -19,7 +19,16 @@
    Гуруҳ учун: ботни гуруҳга қўшиб, гуруҳда бир хабар ёзинг, кейин браузерда
    `https://api.telegram.org/bot<ТОКЕН>/getUpdates` очинг — ичидан `"chat":{"id":-100...}` ни топинг.
 
-## 2-а. Хавфсиз усул (тавсия этилади) — Cloudflare Worker, бепул
+## 2-0. Vercel'да (энг осон — сайт ҳам, форма ҳам бир жойда)
+1. https://vercel.com/new → GitHub репосини (`pentagon`) танланг → **Deploy** (Framework: Other, build керак эмас).
+2. Лойиҳа → **Settings → Environment Variables** да иккита ўзгарувчи қўшинг:
+   - `BOT_TOKEN` — ботнинг токени
+   - `CHAT_ID` — chat ID
+3. **Deployments → Redeploy** босинг (ўзгарувчилар қайта юклансин).
+Тайёр: `content.js` да `form.endpoint` аллақачон `/api/telegram` га қўйилган, `api/telegram.js` ишлайди.
+⚠️ Токенни чатга, кодга ёки GitHub'га ёзманг — фақат Vercel'нинг Environment Variables қисмига.
+
+## 2-а. Cloudflare усули (Vercel ишлатмасангиз) (тавсия этилади) — Cloudflare Worker, бепул
 Токен сайт кодида кўринмайди.
 1. https://dash.cloudflare.com → Workers & Pages → **Create Worker**.
 2. `worker.js` ичидаги кодни Worker'га қўйинг, **Deploy** босинг.

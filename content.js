@@ -162,7 +162,7 @@ window.CONTENT = {
     "gear.17": { uz: `Tutun bilan syomka`, ru: `Съёмки с дымом`, en: `Shooting with smoke` },
     "gear.18": { uz: `Pavilyonda yong‘in signalizatsiyasi o‘rnatilgan, shuning uchun tutunli syomkalar oldindan kelishiladi.`, ru: `В павильоне установлена пожарная сигнализация, поэтому съёмки с дымом необходимо согласовывать заранее.`, en: `The pavilion has a fire alarm, so smoke shoots must be agreed in advance.` },
     "gear.19": `SPECTRE RENT`,
-    "gear.20": { uz: `Yorug‘lik, mebel, uzaytirgichlar`, ru: `Свет, мебель, удлинители`, en: `Lighting, furniture, extension cords` },
+    "gear.20": `Cameras, Lenses, Accessories, Lighting, Grip`,
     "gear.21": { uz: `Kerakli jihozlarni bizning ijara xizmatimiz — SPECTRE RENT dan buyurtma qiling.`, ru: `Заказать всё необходимое можно в нашем прокате — SPECTRE RENT.`, en: `Order what you need from our rental service — SPECTRE RENT.` },
     "gear.22": `+`,
     "gear.23": { uz: `Yorug‘lik bo‘yicha assistent`, ru: `Ассистент по свету`, en: `Lighting assistant` },

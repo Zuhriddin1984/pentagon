@@ -20,10 +20,16 @@ export default async function handler(req, res) {
     '🌐 ' + cut(d.lang, 5).toUpperCase(),
   ].join('\n');
 
+  if (!process.env.BOT_TOKEN || !process.env.CHAT_ID) {
+    return res.status(500).send('config error: BOT_TOKEN yoki CHAT_ID Vercel Environment Variables da yo‘q');
+  }
+
   const r = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: process.env.CHAT_ID, text }),
   });
-  return res.status(r.ok ? 200 : 502).send(r.ok ? 'ok' : 'telegram error');
+  if (r.ok) return res.status(200).send('ok');
+  const j = await r.json().catch(() => ({}));
+  return res.status(502).send('telegram error: ' + (j.description || r.status));
 }

@@ -35,6 +35,11 @@ window.CONTENT = {
     telegramChatId: ``    // faqat 2-usulda
   },
 
+  /* ── Havolalar / Ссылки / Links ── */
+  links: {
+    spectre: `https://www.spectrerental.uz`   // SPECTRE RENT kartochkasi bosilganda ochiladigan sayt
+  },
+
   /* ── Yuguruvchi lenta / Бегущая строка / Marquee ── */
   marquee: {
     uz: [`Siklorama`,`Foto`,`Video`,`Mashina bilan kirish`,`Grimyorxona`,`Yorug‘lik`,`Kontent`],

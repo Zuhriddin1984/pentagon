@@ -139,6 +139,8 @@ section{position:relative;z-index:1;padding:130px 0}
 .gc h4{font:400 16px/1.25 var(--display);margin:22px 0 10px}
 .gc p{color:var(--mute);font-size:14px}
 .gc.warn{border-color:rgba(255,224,27,.5)}.gc.warn i{color:var(--yellow)}
+a.gc{display:block;color:inherit;text-decoration:none}
+.gc.rent:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 18px 40px -16px rgba(255,224,27,.6)}
 .gc.rent{grid-column:span 2;background:var(--yellow);color:#000;border:0}
 .gc.rent i{color:#000;font-size:clamp(22px,3vw,40px);letter-spacing:-.01em}.gc.rent p{color:#222}
 .gc.assist{grid-column:span 2;background:var(--blue);color:#001a3d;border:0}
@@ -340,7 +342,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
     <div class="gc rv"><i data-t="gear.10">◧</i><h4 data-t="gear.11">Grimyorxona, dush, hojatxona</h4><p data-t="gear.12">Pavilyon ichida 4 o‘rinli katta grimyorxona, dush va hojatxona.</p></div>
     <div class="gc rv"><i data-t="gear.13">▭</i><h4 data-t="gear.14">Muzokara stoli</h4><p data-t="gear.15">Jamoa, mijozlar va brifinglar uchun katta stol.</p></div>
     <div class="gc warn rv"><i data-t="gear.16">!</i><h4 data-t="gear.17">Tutun bilan syomka</h4><p data-t="gear.18">Pavilyonda yong‘in signalizatsiyasi o‘rnatilgan, shuning uchun tutunli syomkalar oldindan kelishiladi.</p></div>
-    <div class="gc rent rv"><i data-t="gear.19">SPECTRE RENT</i><h4 data-t="gear.20">Cameras, Lenses, Accessories, Lighting, Grip</h4><p data-t="gear.21">Kerakli jihozlarni bizning ijara xizmatimiz — SPECTRE RENT dan buyurtma qiling.</p></div>
+    <a class="gc rent rv" id="spectreLink" href="https://www.spectrerental.uz" target="_blank" rel="noopener"><i data-t="gear.19">SPECTRE RENT</i><h4 data-t="gear.20">Cameras, Lenses, Accessories, Lighting, Grip</h4><p data-t="gear.21">Kerakli jihozlarni bizning ijara xizmatimiz — SPECTRE RENT dan buyurtma qiling.</p></a>
     <div class="gc assist rv"><i data-t="gear.22">+</i><h4 data-t="gear.23">Yorug‘lik bo‘yicha assistent</h4><p data-t="gear.24">Har xil murakkablikdagi syomkalarda yorug‘lik assistenti yordam beradi.</p></div>
   </div>
 </div></section>
@@ -492,6 +494,7 @@ if(ct.instagram) cl.push(`<a href="${ct.instagram}" target="_blank" rel="noopene
 if(ct.email) cl.push(`<a href="mailto:${ct.email}">${ct.email}</a>`);
 if(ct.address) cl.push(`<span>${ct.address}</span>`);
 $('#contacts').innerHTML=cl.join('');
+if(C.links&&C.links.spectre) $('#spectreLink').href=C.links.spectre;
 
 // nav + parallax
 const nav=$('#nav'), bg=$('#heroBg');

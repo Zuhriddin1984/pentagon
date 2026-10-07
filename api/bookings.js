@@ -4,7 +4,7 @@ import { enabled, redis, KEY, isDate } from './_redis.js';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (!enabled) return res.status(200).json({ dates: [], storage: false });
+  if (!enabled) return res.status(200).json({ dates: [], storage: false, reason: 'not-configured: Upstash Redis ulanmagan (Vercel → Storage)' });
 
   try {
     const { remove, key } = req.query || {};
@@ -17,6 +17,6 @@ export default async function handler(req, res) {
     const dates = (await redis('SMEMBERS', KEY)) || [];
     return res.status(200).json({ dates: dates.sort(), storage: true });
   } catch (e) {
-    return res.status(200).json({ dates: [], storage: false });
+    return res.status(200).json({ dates: [], storage: false, reason: 'error: ' + e.message });
   }
 }

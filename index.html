@@ -225,6 +225,8 @@ a.gc{display:block;color:inherit;text-decoration:none}
 .cal-grid button.today{box-shadow:inset 0 0 0 2px #001a3d}
 .cal-grid button.sel{background:#001a3d;color:var(--yellow)}
 .cal-grid button:disabled{opacity:.3;cursor:default}
+.cal-grid button.booked:disabled{opacity:1;background:rgba(0,26,61,.85);color:#fff;text-decoration:line-through;text-decoration-color:var(--yellow);cursor:not-allowed}
+.cal-legend{margin-top:6px;font-size:12px;font-weight:700;color:#001a3d;opacity:.8}
 .cal-sel{margin-top:14px;font-weight:800;font-size:14px;min-height:20px}
 .contact h2{font-size:clamp(20px,3.1vw,42px)}
 .contact h2 em{color:var(--ink)}
@@ -432,6 +434,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
       <div class="cal-wd" id="calWd"></div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="cal-sel" id="calSel"></div>
+    <div class="cal-legend" id="calLegend"></div>
     </div>
     <form id="form">
       <input required name="name" autocomplete="name" placeholder="Ismingiz" data-tp="book.10">
@@ -538,7 +541,9 @@ $$('.sw').forEach((s,i)=>s.onclick=()=>{
 
 
 // calendar
-var calV=new Date(); calV.setDate(1); var calSel=null;
+var calV=new Date(); calV.setDate(1); var calSel=null; var booked=new Set();
+function ymd(dt){return [dt.getFullYear(),String(dt.getMonth()+1).padStart(2,'0'),String(dt.getDate()).padStart(2,'0')].join('-');}
+function loadBooked(){fetch('/api/bookings',{cache:'no-store'}).then(r=>r.ok?r.json():{dates:[]}).then(j=>{booked=new Set(j.dates||[]);renderCal();}).catch(()=>{});}
 function calFmt(d){const M=(C.calendar&&L(C.calendar.months))||[]; return d.getDate()+' '+(M[d.getMonth()]||'')+' '+d.getFullYear();}
 function renderCal(){
   const M=(C.calendar&&L(C.calendar.months))||[], W=(C.calendar&&L(C.calendar.days))||[];
@@ -550,17 +555,19 @@ function renderCal(){
   let h=''; for(let i=0;i<first;i++) h+='<i></i>';
   for(let d=1;d<=n;d++){
     const dt=new Date(calV.getFullYear(),calV.getMonth(),d);
-    const cls=[dt.getTime()===today.getTime()?'today':'',calSel&&dt.getTime()===calSel.getTime()?'sel':''].join(' ');
-    h+=`<button type="button" class="${cls}" data-d="${d}"${dt<today?' disabled':''}>${d}</button>`;
+    const isB=booked.has(ymd(dt));
+    const cls=[dt.getTime()===today.getTime()?'today':'',calSel&&dt.getTime()===calSel.getTime()?'sel':'',isB?'booked':''].join(' ');
+    h+=`<button type="button" class="${cls}" data-d="${d}"${(dt<today||isB)?' disabled':''}${isB?` title="${L(T['book.17'])||''}"`:''}>${d}</button>`;
   }
   $('#calGrid').innerHTML=h;
   $('#calSel').textContent=calSel?calFmt(calSel):'';
-  $('#dateVal').value=calSel?[calSel.getFullYear(),String(calSel.getMonth()+1).padStart(2,'0'),String(calSel.getDate()).padStart(2,'0')].join('-'):'';
+  $('#dateVal').value=calSel?ymd(calSel):'';
+  $('#calLegend').textContent=booked.size?('● '+(L(T['book.17'])||'')):'';
 }
 $('#calGrid').addEventListener('click',e=>{const b=e.target.closest('button[data-d]'); if(!b) return; calSel=new Date(calV.getFullYear(),calV.getMonth(),+b.dataset.d); renderCal();});
 $('#calPrev').onclick=()=>{calV.setMonth(calV.getMonth()-1);renderCal();};
 $('#calNext').onclick=()=>{calV.setMonth(calV.getMonth()+1);renderCal();};
-window.__cal=renderCal; renderCal();
+window.__cal=renderCal; renderCal(); loadBooked();
 
 // form (demo)
 $('#form').addEventListener('submit',async e=>{
@@ -570,7 +577,7 @@ $('#form').addEventListener('submit',async e=>{
   const typeSel=f.type, data={
     name:f.name.value.trim(), phone:f.phone.value.trim(),
     type:typeSel.options[typeSel.selectedIndex].text,
-    date:calSel?calFmt(calSel):'', comment:f.comment.value.trim(), lang
+    date:calSel?calFmt(calSel):'', dateISO:calSel?ymd(calSel):'', comment:f.comment.value.trim(), lang
   };
   const text=['🆕 Pavilion Pentagon — yangi ariza / новая заявка','',
     '👤 '+data.name,'📞 '+data.phone,'🎬 '+data.type,
@@ -583,7 +590,9 @@ $('#form').addEventListener('submit',async e=>{
     }else if(F.telegramToken&&F.telegramChatId){
       res=await fetch(`https://api.telegram.org/bot${F.telegramToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:F.telegramChatId,text})});
     }else throw new Error('form not configured');
+    if(res.status===409){ ok.className='ok err'; ok.textContent=L(T['book.18']); calSel=null; loadBooked(); return; }
     if(!res.ok) throw new Error('HTTP '+res.status);
+    if(data.dateISO) booked.add(data.dateISO);
     ok.textContent=L(T['book.9']); f.reset(); calSel=null; renderCal();
   }catch(err){
     console.warn('Form send failed:',err);

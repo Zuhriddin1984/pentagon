@@ -229,6 +229,8 @@ window.CONTENT = {
     "book.13": { uz: `Sanani tanlang`, ru: `Выберите дату`, en: `Pick a date` },
     "book.15": { uz: `Yuborilmoqda…`, ru: `Отправляем…`, en: `Sending…` },
     "book.16": { uz: `Ariza yuborilmadi. Iltimos, qo‘ng‘iroq qiling:`, ru: `Заявка не отправилась. Пожалуйста, позвоните:`, en: `The request wasn’t sent. Please call us:` },
+    "book.17": { uz: `Band kunlar`, ru: `Занятые дни`, en: `Booked days` },
+    "book.18": { uz: `Bu sana allaqachon band. Iltimos, boshqa kun tanlang.`, ru: `Эта дата уже занята. Пожалуйста, выберите другой день.`, en: `This date is already booked. Please pick another day.` },
 
     /* ── Pastki qism / Подвал / Footer ── */
     "footer.1": `Pentagon`,

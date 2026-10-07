@@ -32,9 +32,6 @@ export default async function handler(req, res) {
   }
 
   // 2) Telegram
-  const host = req.headers['x-forwarded-host'] || req.headers.host;
-  const undo = reserved && process.env.ADMIN_KEY
-    ? `\n↩️ Bekor qilish: https://${host}/api/bookings?remove=${iso}&key=${process.env.ADMIN_KEY}` : '';
   const text = [
     '🆕 Pavilion Pentagon — yangi ariza / новая заявка', '',
     '👤 ' + name,
@@ -43,12 +40,15 @@ export default async function handler(req, res) {
     '📅 ' + (cut(d.date, 40) || '—') + (reserved ? ' ✅ band qilindi' : ''),
     '💬 ' + (cut(d.comment, 800) || '—'),
     '🌐 ' + cut(d.lang, 5).toUpperCase(),
-  ].join('\n') + undo;
+  ].join('\n');
+  const reply_markup = reserved
+    ? { inline_keyboard: [[{ text: '↩️ Bekor qilish / Отменить', callback_data: 'free:' + iso }]] }
+    : undefined;
 
   const r = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: process.env.CHAT_ID, text }),
+    body: JSON.stringify({ chat_id: process.env.CHAT_ID, text, reply_markup }),
   });
   if (r.ok) return res.status(200).send('ok');
 
